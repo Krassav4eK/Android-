@@ -23,10 +23,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + User.KEY_login + " TEXT, "
                 + User.KEY_password + " TEXT, "
                 + User.KEY_fio + " TEXT, "
-                + User.KEY_phone + "TEXT)";
+                + User.KEY_phone + " TEXT)";
 
         db.execSQL(CREATE_TABLE_USER);
-        Log.d("myLogs", "Таблица создана");
+        Log.d("myLogs", User.TABLE + ":Таблица успешно создана");
     }
 
     @Override
@@ -40,6 +40,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void DeleteAllData(Context context) {
         context.deleteDatabase(DATABASE_NAME);
+        Log.d("myLogs", User.TABLE + ":Записи удалены");
     }
 }
 

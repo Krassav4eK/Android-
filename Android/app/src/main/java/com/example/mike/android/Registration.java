@@ -18,8 +18,6 @@ public class Registration extends AppCompatActivity implements android.view.View
     Button Btnreg, BtnShow, BtnDelete;
     EditText email, password, fio, phone;
 
-    ListView Table;
-
     private int _UserId = 0;
 
     @Override
@@ -45,8 +43,6 @@ public class Registration extends AppCompatActivity implements android.view.View
         Btnreg.setOnClickListener(this);
         BtnShow.setOnClickListener(this);
 
-        Table = (ListView) findViewById(R.id.listview);
-
         /*_UserId = 0;
         Intent intent = getIntent();
         _UserId = intent.getIntExtra("User_Id", 0);
@@ -64,11 +60,11 @@ public class Registration extends AppCompatActivity implements android.view.View
         if (view == findViewById(R.id.btnReg)) {
             User user = new User();
 
-            user.IdUser = _UserId;
             user.Login = email.getText().toString();
             user.Password = password.getText().toString();
             user.FIO = fio.getText().toString();
             user.Phone = phone.getText().toString();
+            user.IdUser = _UserId;
 
             if (_UserId == 0) {
                 _UserId = UToDb.SetDataUser(user);
@@ -82,7 +78,7 @@ public class Registration extends AppCompatActivity implements android.view.View
         }
 
         if (view == findViewById(R.id.show)) {
-            User user = UToDb.getUserById(1);
+            User user = UToDb.getUserById(2);
             Log.d(TAG, "----Объект User----");
             Log.d(TAG, String.valueOf( user.IdUser));
             Log.d(TAG, user.Login.toString());

@@ -4,31 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.mike.android.Enter">
+    tools:context="com.example.mike.android.Enter"
+    tools:layout_editor_absoluteY="81dp"
+    tools:layout_editor_absoluteX="0dp">
 
     <Button
         android:id="@+id/btnReg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="21dp"
         android:text="@string/Reg"
-        app:layout_constraintBottom_toTopOf="@+id/Enter"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:onClick="newScreen"
+        tools:layout_constraintRight_creator="1"
         tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintRight_creator="1" />
+        android:layout_marginBottom="119dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintHorizontal_bias="0.501" />
 
     <Button
-        android:id="@+id/Enter"
+        android:id="@+id/btnEnter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Enter"
-        tools:layout_constraintBottom_creator="1"
         android:layout_marginStart="17dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toTopOf="@+id/btnReg"
         tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="114dp"
+        android:layout_marginBottom="27dp"
         app:layout_constraintLeft_toLeftOf="@+id/btnReg"
         android:layout_marginLeft="17dp" />
 
@@ -37,25 +41,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="@string/Login"
         android:inputType="textEmailAddress"
-        tools:layout_constraintTop_creator="1"
         tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toTopOf="@+id/Password"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="113dp"
         tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginBottom="49dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <EditText
         android:id="@+id/Password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="36dp"
         android:ems="10"
+        android:hint="@string/Password"
         android:inputType="textPassword"
-        app:layout_constraintLeft_toLeftOf="@+id/Login"
-        app:layout_constraintTop_toBottomOf="@+id/Login"
+        tools:ignore="RtlHardcoded"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toTopOf="@+id/btnEnter"
         tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintTop_creator="1" />
+        android:layout_marginBottom="35dp"
+        app:layout_constraintLeft_toLeftOf="@+id/Login" />
 </android.support.constraint.ConstraintLayout>

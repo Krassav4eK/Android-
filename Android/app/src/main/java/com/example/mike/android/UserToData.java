@@ -6,22 +6,22 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class UserToData {
 
     private static final String TAG = "myLogs";
-
     private DatabaseHelper dbHelper;
     Context context;
     Cursor cursor;
     SQLiteDatabase db;
 
     public UserToData(Context context) {
-        this.context = context;
         dbHelper = new DatabaseHelper(context);
     }
 
     public int SetDataUser(User User) {
-        Log.d("myLogs", "Дошел");
         //Open connection to write data
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -36,45 +36,22 @@ public class UserToData {
         return (int) User_Id;
     }
 
-    public boolean CheckUserFromBase(User User){
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        String selectQuery = "SELECT  " +
-                User.KEY_login + "," +
-                User.KEY_password +
-                " FROM " + User.TABLE
-                + " WHERE " +
-                User.KEY_login + "=?";// It's a good practice to use parameter ?, instead of concatenate string
-
-        boolean result;
-        String PassFromData;
-        User user = new User();
-
-        cursor = db.rawQuery(selectQuery, new String[]{String.valueOf(User.Login)});
-        cursor.moveToFirst();
-        PassFromData = cursor.getString(cursor.getColumnIndex(user.KEY_password));
-
-        if (User.Password.toString() == PassFromData)
-        {
-            result = true;
+    public  boolean CheckUserFromBase(String Login, String Password) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        final int NUMBER_ID_COLUMN = 2;
+        boolean result = false;
+        String select = "SELECT * FROM " + User.TABLE + " WHERE " + User.KEY_login + " =?";
+        Cursor cursor = db.rawQuery(select, new String[]{Login});
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            if (Password.toString().equals(String.valueOf(cursor.getString(NUMBER_ID_COLUMN)))) {
+                Log.d(TAG, "ТРУ!");
+                result = true;
+            }
         }
-        else {result = false;}
-
-        Log.d(TAG, "Готово");
-
-        /*if (cursor.moveToFirst()) {
-            do {
-                user.IdUser = cursor.getInt(cursor.getColumnIndex(user.KEY_ID));
-                user.Login = cursor.getString(cursor.getColumnIndex(user.KEY_login));
-                user.Password = cursor.getString(cursor.getColumnIndex(user.KEY_password));
-                user.FIO = cursor.getString(cursor.getColumnIndex(user.KEY_fio));
-                user.Phone = cursor.getString(cursor.getColumnIndex(user.KEY_phone));
-
-            } while (cursor.moveToNext());
-        }*/
-
+        Log.d(TAG, Password);
+        Log.d(TAG, cursor.getString(NUMBER_ID_COLUMN));
         cursor.close();
-        db.close();
-
         return result;
     }
 
@@ -101,14 +78,36 @@ public class UserToData {
         db.close(); // Closing database connection
     }
 
-    public int getItemCount() {
-        db = dbHelper.getReadableDatabase();
+    public ArrayList<HashMap<String, String>> getUsersList() {
+        //Open connection to read only
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String selectQuery = "SELECT  " +
+                User.KEY_ID + "," +
+                User.KEY_login + "," +
+                User.KEY_password + "," +
+                User.KEY_fio + "," +
+                User.KEY_phone +
+                " FROM " + User.TABLE;
 
-        cursor = db.query(User.TABLE, null, null, null, null, null, null);
-        int cnt = cursor.getCount();
+        //User user = new User();
+        ArrayList<HashMap<String, String>> userList = new ArrayList<HashMap<String, String>>();
+        Log.d(TAG,"Я тут");
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        // looping through all rows and adding to list
+
+        if (cursor.moveToFirst()) {
+            do {
+                HashMap<String, String> user = new HashMap<String, String>();
+                user.put("id", cursor.getString(cursor.getColumnIndex(User.KEY_ID)));
+                user.put("login", cursor.getString(cursor.getColumnIndex(User.KEY_login)));
+                userList.add(user);
+
+            } while (cursor.moveToNext());
+        }
+
         cursor.close();
-
-        return cnt;
+        db.close();
+        return userList;
     }
 
     public User getUserById(int Id) {
@@ -117,7 +116,7 @@ public class UserToData {
                 User.KEY_ID + "," +
                 User.KEY_login + "," +
                 User.KEY_password + "," +
-                User.KEY_fio  + "," +
+                User.KEY_fio + "," +
                 User.KEY_phone +
                 " FROM " + User.TABLE
                 + " WHERE " +
@@ -126,9 +125,7 @@ public class UserToData {
         int iCount = 0;
         User user = new User();
 
-        cursor = db.rawQuery(selectQuery, new String[]{String.valueOf(Id)});
-
-        Log.d(TAG, "Дошел");
+        Cursor cursor = db.rawQuery(selectQuery, new String[]{String.valueOf(Id)});
 
         if (cursor.moveToFirst()) {
             do {
@@ -146,6 +143,16 @@ public class UserToData {
         return user;
     }
 
+    public int getItemCount() {
+        db = dbHelper.getReadableDatabase();
+
+        cursor = db.query(User.TABLE, null, null, null, null, null, null);
+        int cnt = cursor.getCount();
+        cursor.close();
+
+        return cnt;
+    }
+
     public void DeleteAllData(Context context) {
         dbHelper.DeleteAllData(context);
         Log.d(TAG, "Данные таблицы " + User.TABLE + " удалены");
@@ -156,44 +163,3 @@ public class UserToData {
         db.close();
     }
 }
-
-    /**
-
-
-
-
-}
-
-/*public ArrayList<HashMap<String, String>> getUserList() {
-        //Open connection to read only
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String selectQuery = "SELECT  " +
-                User.KEY_ID + "," +
-                User.KEY_login + "," +
-                User.KEY_password + "," +
-                User.KEY_fio + "," +
-                User.KEY_phone +
-                " FROM " + User.TABLE;
-
-        //User user = new User();
-        ArrayList<HashMap<String, String>> userList = new ArrayList<HashMap<String, String>>();
-
-        Log.d(TAG, "Работает!");
-        Cursor cursor = db.rawQuery(selectQuery,null);
-        Log.d(TAG, "Работает2!");
-        // looping through all rows and adding to list
-
-        if (cursor.moveToFirst()) {
-            do {
-                HashMap<String, String> user = new HashMap<String, String>();
-                user.put("id", cursor.getString(cursor.getColumnIndex(User.KEY_ID)));
-                user.put("login", cursor.getString(cursor.getColumnIndex(User.KEY_login)));
-                userList.add(user);
-
-            } while (cursor.moveToNext());
-        }
-
-        cursor.close();
-        db.close();
-        return userList;
-    }*/

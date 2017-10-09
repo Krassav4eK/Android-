@@ -16,4 +16,6 @@
     <string name="Enter">Войти</string>
     <string name="Reg">Регистрация</string>
     <string name="Registratin">Регистрация</string>
+    <string name="Login">Логин</string>
+    <string name="Password">Пароль</string>
 </resources>
